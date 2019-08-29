@@ -17,4 +17,10 @@ public class ResponseEntityExceptionHandler {
         return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler
+    public final ResponseEntity<Object> handleAliasAlreadyExists(AliasAlreadyExistsException ex, WebRequest request) {
+        AliasAlreadyExistsResponse exceptionResponse = new AliasAlreadyExistsResponse(ex.getMessage());
+        return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
+    }
+
 }

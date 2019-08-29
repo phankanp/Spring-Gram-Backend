@@ -1,16 +1,18 @@
 package com.phan.spring_gram_backend.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.hibernate.annotations.UpdateTimestamp;
-import org.springframework.data.annotation.Id;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Lob;
+
+import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
+import java.util.Date;
 
 @Entity
 @Getter
@@ -29,13 +31,6 @@ public class Image {
     @NotBlank(message = "Caption is required")
     private String caption;
 
-//    @JsonFormat(pattern = "yyyy-mm-dd")
-//    @Column(updatable = false)
-//    private Date created_At;
-//
-//    @JsonFormat(pattern = "yyyy-mm-dd")
-//    private Date updated_At;
-
     @CreationTimestamp
     private LocalDateTime createDateTime;
 
@@ -43,5 +38,11 @@ public class Image {
     private LocalDateTime updateDateTime;
 
     private int likeCount = 0;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "user_id", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @JsonIgnore
+    private User user;
 
 }

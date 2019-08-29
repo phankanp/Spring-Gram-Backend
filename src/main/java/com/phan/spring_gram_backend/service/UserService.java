@@ -1,5 +1,6 @@
 package com.phan.spring_gram_backend.service;
 
+import com.phan.spring_gram_backend.exceptions.AliasAlreadyExistsException;
 import com.phan.spring_gram_backend.exceptions.UsernameAlreadyExistsException;
 import com.phan.spring_gram_backend.model.User;
 import com.phan.spring_gram_backend.repository.UserRepository;
@@ -26,8 +27,10 @@ public class UserService {
             user.setConfirmPassword(" ");
 
             return userRepository.save(user);
-        } catch (Exception e) {
+        } catch (UsernameAlreadyExistsException e1) {
             throw new UsernameAlreadyExistsException("Email '" + user.getUsername() + "' is already in use");
+        } catch (AliasAlreadyExistsException e2) {
+            throw new UsernameAlreadyExistsException("Username '" + user.getAlias() + "' is already in use");
         }
     }
 }
