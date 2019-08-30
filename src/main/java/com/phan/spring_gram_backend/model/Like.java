@@ -20,10 +20,10 @@ public class Like extends Auditable {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "image_id", nullable = false)
+    @JoinColumn(name = "post_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonIgnore
-    private Image image;
+    private Post post;
 
 //    @OneToOne(fetch = FetchType.LAZY, optional = false)
 //    @JoinColumn(name = "user_id", nullable = false)

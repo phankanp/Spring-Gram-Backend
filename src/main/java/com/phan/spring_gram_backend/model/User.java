@@ -51,11 +51,11 @@ public class User implements UserDetails {
 
     @UpdateTimestamp
     private LocalDateTime updateDateTime;
-//
-//    @OneToOne(fetch = FetchType.LAZY,
-//            cascade =  CascadeType.ALL,
-//            mappedBy = "user")
-//    private Comment comment;
+
+    @OneToOne(fetch = FetchType.LAZY,
+            cascade =  CascadeType.ALL,
+            mappedBy = "user")
+    private Comment comment;
 //
 //    @OneToOne(fetch = FetchType.LAZY,
 //            cascade =  CascadeType.ALL,
