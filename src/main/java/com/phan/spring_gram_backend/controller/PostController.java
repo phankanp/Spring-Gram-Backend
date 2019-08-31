@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.security.Principal;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/post/")
@@ -56,7 +55,7 @@ public class PostController {
 
         postService.deletePost(postId, principal.getName());
 
-        return new ResponseEntity<String>("Post with ID: '"+ postId +"' was deleted", HttpStatus.OK);
+        return new ResponseEntity<String>("Post with ID: '" + postId + "' was deleted", HttpStatus.OK);
     }
 
 }

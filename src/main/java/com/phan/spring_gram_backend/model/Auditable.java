@@ -17,7 +17,7 @@ import java.time.LocalDateTime;
 public abstract class Auditable {
 
     @CreatedBy
-    private String user_id;
+    private String alias;
 
     @CreatedDate
     private LocalDateTime creationDate;

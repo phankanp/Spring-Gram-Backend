@@ -3,8 +3,6 @@ package com.phan.spring_gram_backend.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -14,8 +12,6 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
 import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
 
 @Entity
 @Getter
@@ -23,6 +19,7 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
+@Table(name = "Users")
 public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -53,14 +50,14 @@ public class User implements UserDetails {
     private LocalDateTime updateDateTime;
 
     @OneToOne(fetch = FetchType.LAZY,
-            cascade =  CascadeType.ALL,
+            cascade = CascadeType.ALL,
             mappedBy = "user")
     private Comment comment;
-//
-//    @OneToOne(fetch = FetchType.LAZY,
-//            cascade =  CascadeType.ALL,
-//            mappedBy = "user")
-//    private Like like;
+
+    @OneToOne(fetch = FetchType.LAZY,
+            cascade = CascadeType.ALL,
+            mappedBy = "user")
+    private Like like;
 
 
     @Override

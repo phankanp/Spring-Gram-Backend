@@ -22,7 +22,7 @@ public class PostService {
 
 
     public List<Post> getAllPost() {
-       return postRepository.findAll();
+        return postRepository.findAll();
     }
 
     public Post getPostById(Long postId) {
