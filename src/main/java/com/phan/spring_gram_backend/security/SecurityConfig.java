@@ -58,6 +58,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
+                .antMatchers("/api/post/", "/api/post/{postId}/image")
+                .permitAll()
+                .and()
+                .authorizeRequests()
                 .antMatchers(
                         "/",
                         "/**/*.html",

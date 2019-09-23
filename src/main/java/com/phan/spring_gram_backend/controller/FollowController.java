@@ -1,5 +1,6 @@
 package com.phan.spring_gram_backend.controller;
 
+import com.phan.spring_gram_backend.repository.FollowersRepository;
 import com.phan.spring_gram_backend.service.FollowService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,10 +18,15 @@ public class FollowController {
     @Autowired
     FollowService followService;
 
+    @Autowired
+    FollowersRepository followersRepository;
+
+
     @PostMapping("/{userId}")
     public ResponseEntity<?> addFollow(@PathVariable(value = "userId") Long userId, Principal principal) {
 
         followService.addFollow(userId, principal.getName());
+
 
         return new ResponseEntity<String>("Successfully followed user with ID: '" + userId + "'", HttpStatus.OK);
     }

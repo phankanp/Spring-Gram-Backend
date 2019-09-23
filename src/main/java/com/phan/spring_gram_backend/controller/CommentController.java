@@ -1,7 +1,6 @@
 package com.phan.spring_gram_backend.controller;
 
 import com.phan.spring_gram_backend.model.Comment;
-import com.phan.spring_gram_backend.model.Post;
 import com.phan.spring_gram_backend.service.CommentService;
 import com.phan.spring_gram_backend.service.ValidationErrorService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +34,7 @@ public class CommentController {
 
     @PostMapping("/{postId}/comments")
     public ResponseEntity<?> addCommentToPost(@Valid @RequestBody Comment comment, BindingResult result, @PathVariable Long postId,
-                                        Principal principal) {
+                                              Principal principal) {
 
         ResponseEntity<?> errorMap = validationErrorService.MapValidationService(result);
         if (errorMap != null) {
@@ -48,11 +47,11 @@ public class CommentController {
     }
 
     @DeleteMapping("/posts/{postId}/comments/{commentId}")
-    public ResponseEntity<?> deleteCommentFromPost(@PathVariable (value = "postId") Long postId,
-                                                   @PathVariable (value = "commentId") Long commentId) {
+    public ResponseEntity<?> deleteCommentFromPost(@PathVariable(value = "postId") Long postId,
+                                                   @PathVariable(value = "commentId") Long commentId) {
 
         commentService.deleteComment(commentId, postId);
 
-        return new ResponseEntity<String>("Comment with ID: '"+ commentId +"' was deleted", HttpStatus.OK);
+        return new ResponseEntity<String>("Comment with ID: '" + commentId + "' was deleted", HttpStatus.OK);
     }
 }

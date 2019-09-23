@@ -31,6 +31,11 @@ public class FollowService {
         follow.setFollowing(userToFollow.get());
 
         followersRepository.save(follow);
+
+
+//        for (Followers f : followers) {
+//            System.out.printf(f.getFollowers().getUsername());
+//        }
     }
 
     public void removeFollow(Long toUnFollowUserId, String username) {

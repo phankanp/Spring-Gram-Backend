@@ -30,6 +30,4 @@ public class Followers {
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonIgnore
     private User following;
-
-
 }

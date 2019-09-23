@@ -1,8 +1,11 @@
 package com.phan.spring_gram_backend.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -12,6 +15,8 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -49,16 +54,35 @@ public class User implements UserDetails {
     @UpdateTimestamp
     private LocalDateTime updateDateTime;
 
-    @OneToOne(fetch = FetchType.LAZY,
+    @JsonIgnore
+    @OneToMany(mappedBy = "user",
             cascade = CascadeType.ALL,
-            mappedBy = "user")
-    private Comment comment;
+            orphanRemoval = true)
+    private Set<Comment> comments;
 
-    @OneToOne(fetch = FetchType.LAZY,
+    @JsonIgnore
+    @OneToMany(
+            mappedBy = "followers",
             cascade = CascadeType.ALL,
-            mappedBy = "user")
-    private Like like;
+            orphanRemoval = true
+    )
+    private Set<Followers> followers = new HashSet<>();
 
+    @JsonIgnore
+    @OneToMany(
+            mappedBy = "following",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    private Set<Followers> following = new HashSet<>();
+
+    public User(@Email(message = "Username needs to be an valid email") @NotBlank(message = "username is required") String username, @NotBlank(message = "Please enter alias.") String alias, @NotBlank(message = "Please enter your full name") String fullName, @NotBlank(message = "Password field is required") String password, String confirmPassword) {
+        this.username = username;
+        this.alias = alias;
+        this.fullName = fullName;
+        this.password = password;
+        this.confirmPassword = confirmPassword;
+    }
 
     @Override
     @JsonIgnore
