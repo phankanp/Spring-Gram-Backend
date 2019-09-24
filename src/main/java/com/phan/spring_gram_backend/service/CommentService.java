@@ -32,7 +32,7 @@ public class CommentService {
         return allPostComments;
     }
 
-    public Comment saveComment(Comment comment, Long postId, String username) {
+    public List<Comment> saveComment(Comment comment, Long postId, String username) {
 
         User user = userRepository.findByUsername(username);
 
@@ -46,10 +46,12 @@ public class CommentService {
         comment.setUserAlias(user.getAlias());
         comment.setPost(commentToPost.get());
 
-        return commentRepository.save(comment);
+        commentRepository.save(comment);
+
+        return commentRepository.findByPostId(postId);
     }
 
-    public void deleteComment(Long commentId, Long postId) {
+    public List<Comment> deleteComment(Long commentId, Long postId) {
         Optional<Comment> commentToDelete = commentRepository.findByIdAndPostId(commentId, postId);
 
         if (!commentToDelete.isPresent()) {
@@ -57,5 +59,7 @@ public class CommentService {
         }
 
         commentRepository.delete(commentToDelete.get());
+
+        return commentRepository.findByPostId(postId);
     }
 }

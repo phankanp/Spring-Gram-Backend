@@ -25,33 +25,33 @@ public class CommentController {
     private ValidationErrorService validationErrorService;
 
 
-    @GetMapping("/{postId}/comments")
+    @GetMapping("/comment/{postId}")
     public List<Comment> getAllCommentsForPost(@PathVariable Long postId) {
 
         return commentService.getAllCommentsForPost(postId);
     }
 
 
-    @PostMapping("/{postId}/comments")
+    @PostMapping("/comment/{postId}")
     public ResponseEntity<?> addCommentToPost(@Valid @RequestBody Comment comment, BindingResult result, @PathVariable Long postId,
                                               Principal principal) {
-
+        
         ResponseEntity<?> errorMap = validationErrorService.MapValidationService(result);
         if (errorMap != null) {
             return errorMap;
         }
 
-        Comment comment1 = commentService.saveComment(comment, postId, principal.getName());
+        List<Comment> comments = commentService.saveComment(comment, postId, principal.getName());
 
-        return new ResponseEntity<Comment>(comment1, HttpStatus.CREATED);
+        return new ResponseEntity<>(comments, HttpStatus.CREATED);
     }
 
-    @DeleteMapping("/posts/{postId}/comments/{commentId}")
+    @DeleteMapping("/comment/{postId}/{commentId}")
     public ResponseEntity<?> deleteCommentFromPost(@PathVariable(value = "postId") Long postId,
                                                    @PathVariable(value = "commentId") Long commentId) {
 
-        commentService.deleteComment(commentId, postId);
+        List<Comment> comments = commentService.deleteComment(commentId, postId);
 
-        return new ResponseEntity<String>("Comment with ID: '" + commentId + "' was deleted", HttpStatus.OK);
+        return new ResponseEntity<>(comments, HttpStatus.OK);
     }
 }

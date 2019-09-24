@@ -41,17 +41,21 @@ public class Post {
     @UpdateTimestamp
     private LocalDateTime updateDateTime;
 
+    @OneToMany(cascade = CascadeType.ALL,
+            fetch = FetchType.LAZY,
+            mappedBy = "post")
+    private Set<Like> likes = new HashSet<>();
+
+    @OneToMany(cascade = CascadeType.ALL,
+            fetch = FetchType.LAZY,
+            mappedBy = "post")
+    private Set<Comment> comments;
+
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "user_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonIgnore
     private User user;
-
-    @OneToMany(mappedBy = "post")
-    private Set<Like> likes = new HashSet<>();
-
-    @OneToMany(mappedBy = "post")
-    private Set<Comment> comments;
 
     private String userAlias;
 

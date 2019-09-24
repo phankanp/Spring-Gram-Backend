@@ -121,11 +121,11 @@ public class PostService {
     public void deletePost(Long postId, String username) {
         Optional<Post> postToDelete = postRepository.findById(postId);
 
-//        if (postToDelete.isPresent() && (!postToDelete.get().getUser().getUsername().equals(username))) {
-//            throw new PostNotFoundException("You can only delete a post created by you");
-//        } else if (!postToDelete.isPresent()) {
-//            throw new PostNotFoundException("The post with ID: '" + postId + "' cannot be deleted because it does not exists");
-//        }
+        if (postToDelete.isPresent() && (!postToDelete.get().getUser().getUsername().equals(username))) {
+            throw new PostNotFoundException("You can only delete a post created by you");
+        } else if (!postToDelete.isPresent()) {
+            throw new PostNotFoundException("The post with ID: '" + postId + "' cannot be deleted because it does not exists");
+        }
 
         postRepository.delete(postToDelete.get());
     }
