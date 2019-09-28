@@ -14,10 +14,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.security.Principal;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 @Service
 public class PostService {
@@ -30,26 +28,6 @@ public class PostService {
 
     @Autowired
     private LikeRepository likeRepository;
-
-
-//    public List<Map<String, String>> getAllPost() {
-////
-////        List<Map<String, String>> posts = new ArrayList<>();
-////
-////        for (Post p : postRepository.findAll()) {
-////            Map<String, String> postsMap = new HashMap<>();
-////            postsMap.put("id", p.getId().toString());
-////            postsMap.put("caption", p.getCaption());
-//////            postsMap.put("userAlias", p.getUser().getAlias());
-//////            postsMap.put("createDateTime", p.getCreateDateTime().toString());
-//////            postsMap.put("updateDateTime", p.getUpdateDateTime().toString());
-//////            postsMap.put("likeCount", String.valueOf(p.getLikeCount()));
-////
-////            posts.add(postsMap);
-////        }
-////
-////        return posts;
-////    }
 
     public List<Post> getAllPost() {
 
@@ -67,6 +45,7 @@ public class PostService {
     }
 
     public Post saveOrUpdatePost(Post post, MultipartFile imageFile, String username) {
+
         if (post.getId() != null) {
             Optional<Post> existingPost = postRepository.findById(post.getId());
 
@@ -93,30 +72,6 @@ public class PostService {
 
         return postRepository.save(post);
     }
-
-//    public Post saveOrUpdatePost(Post post, MultipartFile imageFile) {
-////        if (post.getId() != null) {
-////            Optional<Post> existingPost = postRepository.findById(post.getId());
-////
-////            if (existingPost.isPresent() && (!existingPost.get().getUser().getUsername().equals(username))) {
-////                throw new PostNotFoundException("The post was not found in you account, you can only edit post created by you");
-////            } else if (!existingPost.isPresent()) {
-////                throw new PostNotFoundException("The post with ID: '" + post.getId() + "' cannot be updated because it does not exists");
-////            }
-////        }
-//
-////        User user = userRepository.findByUsername(username);
-//
-//
-//        try {
-//            post.setImage(imageFile.getBytes());
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-////        post.setUser(user);
-//
-//        return postRepository.save(post);
-//    }
 
     public void deletePost(Long postId, String username) {
         Optional<Post> postToDelete = postRepository.findById(postId);

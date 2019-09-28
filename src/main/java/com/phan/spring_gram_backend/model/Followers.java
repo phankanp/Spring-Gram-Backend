@@ -23,11 +23,15 @@ public class Followers {
     @JoinColumn(name = "followers_user_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonIgnore
-    private User followers;
+    private User userFollower;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "following_user_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonIgnore
     private User following;
+
+    private String followersAlias;
+
+    private String followingAlias;
 }

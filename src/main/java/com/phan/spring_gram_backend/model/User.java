@@ -1,11 +1,8 @@
 package com.phan.spring_gram_backend.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -62,7 +59,7 @@ public class User implements UserDetails {
 
     @JsonIgnore
     @OneToMany(
-            mappedBy = "followers",
+            mappedBy = "following",
             cascade = CascadeType.ALL,
             orphanRemoval = true
     )
@@ -70,7 +67,7 @@ public class User implements UserDetails {
 
     @JsonIgnore
     @OneToMany(
-            mappedBy = "following",
+            mappedBy = "userFollower",
             cascade = CascadeType.ALL,
             orphanRemoval = true
     )

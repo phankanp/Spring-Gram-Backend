@@ -7,7 +7,6 @@ import com.phan.spring_gram_backend.model.User;
 import com.phan.spring_gram_backend.repository.LikeRepository;
 import com.phan.spring_gram_backend.repository.PostRepository;
 import com.phan.spring_gram_backend.service.CommentService;
-import com.phan.spring_gram_backend.service.FollowService;
 import com.phan.spring_gram_backend.service.PostService;
 import com.phan.spring_gram_backend.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,8 +17,6 @@ import org.springframework.stereotype.Component;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.Set;
 
 @Component
 public class DatabaseLoader implements ApplicationRunner {
@@ -32,9 +29,6 @@ public class DatabaseLoader implements ApplicationRunner {
 
     @Autowired
     CommentService commentService;
-
-    @Autowired
-    FollowService followService;
 
     @Autowired
     PostRepository postRepository;
@@ -76,10 +70,10 @@ public class DatabaseLoader implements ApplicationRunner {
 
         commentService.saveComment(testComment1, p1.getId(), testUser1.getUsername());
 
-        followService.addFollow(testUser1.getId(), testUser2.getUsername());
-        followService.addFollow(testUser1.getId(), testUser3.getUsername());
-//
-//        postService.likePost(p1, testUser1);
+        userService.addFollowDBLoader(testUser1.getId(), testUser2.getUsername());
+        userService.addFollowDBLoader(testUser1.getId(), testUser3.getUsername());
+        userService.addFollowDBLoader(testUser2.getId(), testUser1.getUsername());
+        userService.addFollowDBLoader(testUser3.getId(), testUser1.getUsername());
 
         Like l1 = new Like();
 

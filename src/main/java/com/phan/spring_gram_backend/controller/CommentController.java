@@ -35,7 +35,7 @@ public class CommentController {
     @PostMapping("/comment/{postId}")
     public ResponseEntity<?> addCommentToPost(@Valid @RequestBody Comment comment, BindingResult result, @PathVariable Long postId,
                                               Principal principal) {
-        
+
         ResponseEntity<?> errorMap = validationErrorService.MapValidationService(result);
         if (errorMap != null) {
             return errorMap;

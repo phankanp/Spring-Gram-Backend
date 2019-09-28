@@ -14,7 +14,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import java.security.Principal;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/post")
@@ -47,17 +49,26 @@ public class PostController {
         return postService.getPostById(postId).getImage();
     }
 
-    @PostMapping("")
-    public ResponseEntity<?> createNewPosts(@Valid Post post, BindingResult result, @RequestPart("file") MultipartFile imageFile, Principal principal) {
+    @PostMapping("/")
+    public ResponseEntity<?> createNewPosts(@Valid Post post, BindingResult result, MultipartFile image, Principal principal) {
 
-        ResponseEntity<?> errorMap = validationErrorService.MapValidationService(result);
-        if (errorMap != null) {
-            return errorMap;
+        Map<String, String> errorMap = new HashMap<>();
+
+        if (image == null && post.getCaption().equals("null")) {
+            errorMap.put("image", "Must choose an image");
+            errorMap.put("caption", "Must enter a caption");
+            return new ResponseEntity<Map<String, String>>(errorMap, HttpStatus.BAD_REQUEST);
+        } else if (image == null && !post.getCaption().equals("null")) {
+            errorMap.put("image", "Must choose an image");
+            return new ResponseEntity<Map<String, String>>(errorMap, HttpStatus.BAD_REQUEST);
+        } else if (image != null && post.getCaption().equals("null")) {
+            errorMap.put("caption", "Must enter a caption");
+            return new ResponseEntity<Map<String, String>>(errorMap, HttpStatus.BAD_REQUEST);
         }
 
-        Post post1 = postService.saveOrUpdatePost(post, imageFile, principal.getName());
+        Post post1 = postService.saveOrUpdatePost(post, image, principal.getName());
 
-        return new ResponseEntity<Post>(post1, HttpStatus.CREATED);
+        return new ResponseEntity<>(post1, HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{postId}")
@@ -83,5 +94,4 @@ public class PostController {
 
         return ResponseEntity.ok(likes);
     }
-
 }

@@ -1,6 +1,5 @@
 package com.phan.spring_gram_backend.controller;
 
-import com.phan.spring_gram_backend.model.Followers;
 import com.phan.spring_gram_backend.model.User;
 import com.phan.spring_gram_backend.repository.FollowersRepository;
 import com.phan.spring_gram_backend.repository.UserRepository;
@@ -24,7 +23,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import java.util.List;
 
 import static com.phan.spring_gram_backend.security.SecurityConstants.TOKEN_PREFIX;
 
