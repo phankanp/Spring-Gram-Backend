@@ -6,6 +6,7 @@ import com.phan.spring_gram_backend.model.Post;
 import com.phan.spring_gram_backend.model.User;
 import com.phan.spring_gram_backend.repository.LikeRepository;
 import com.phan.spring_gram_backend.repository.PostRepository;
+import com.phan.spring_gram_backend.repository.ProfileImageRepository;
 import com.phan.spring_gram_backend.service.CommentService;
 import com.phan.spring_gram_backend.service.PostService;
 import com.phan.spring_gram_backend.service.UserService;
@@ -36,19 +37,26 @@ public class DatabaseLoader implements ApplicationRunner {
     @Autowired
     LikeRepository likeRepository;
 
+    @Autowired
+    ProfileImageRepository profileImageRepository;
+
     @Override
     public void run(ApplicationArguments args) throws Exception {
 
         LocalDateTime createDateTime = LocalDateTime.now();
         LocalDateTime updateDateTime = LocalDateTime.now();
 
-        User testUser1 = new User("testUser1@gmail.com", "testUserOne", "Test User One", "password", "password");
-        User testUser2 = new User("testUser2@gmail.com", "testUserTwo", "Test User Two", "password", "password");
-        User testUser3 = new User("testUser3@gmail.com", "testUserThree", "Test User Two", "password", "password");
+        User testUser1 = new User("testUser1@gmail.com", "testUserOne", "Test User One", "password", "password", Files.readAllBytes(Paths.get("./src/main/resources/static/images/profile images/rmu1" +
+                ".jpg")));
+        User testUser2 = new User("testUser2@gmail.com", "testUserTwo", "Test User Two", "password", "password", Files.readAllBytes(Paths.get("./src/main/resources/static/images/profile images/rmu2" +
+                ".jpg")));
+        User testUser3 = new User("testUser3@gmail.com", "testUserThree", "Test User Two", "password", "password", Files.readAllBytes(Paths.get("./src/main/resources/static/images/profile images/rmu3" +
+                ".jpg")));
 
         userService.saveUser(testUser1);
         userService.saveUser(testUser2);
         userService.saveUser(testUser3);
+
 
         Post p1 = new Post(
                 Files.readAllBytes(Paths.get("./src/main/resources/static/images/yosemite" +

@@ -3,6 +3,7 @@ package com.phan.spring_gram_backend.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.Type;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -52,9 +53,9 @@ public class User implements UserDetails {
     private LocalDateTime updateDateTime;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "user",
-            cascade = CascadeType.ALL,
-            orphanRemoval = true)
+    @OneToMany(mappedBy = "user"
+
+    )
     private Set<Comment> comments;
 
     @JsonIgnore
@@ -73,12 +74,32 @@ public class User implements UserDetails {
     )
     private Set<Followers> following = new HashSet<>();
 
+//    @OneToOne(fetch = FetchType.LAZY,
+////            cascade =  CascadeType.ALL,
+////            mappedBy = "user")
+////    @JsonIgnore
+////    private ProfileImage profileImage;
+
+    @Lob
+    @Type(type = "org.hibernate.type.ImageType")
+    private byte[] profileImage;
+
+    public User(@Email(message = "Username needs to be an valid email") @NotBlank(message = "username is required") String username, @NotBlank(message = "Please enter alias.") String alias, @NotBlank(message = "Please enter your full name") String fullName, @NotBlank(message = "Password field is required") String password, String confirmPassword, byte[] profileImage) {
+        this.username = username;
+        this.alias = alias;
+        this.fullName = fullName;
+        this.password = password;
+        this.confirmPassword = confirmPassword;
+        this.profileImage = profileImage;
+    }
+
     public User(@Email(message = "Username needs to be an valid email") @NotBlank(message = "username is required") String username, @NotBlank(message = "Please enter alias.") String alias, @NotBlank(message = "Please enter your full name") String fullName, @NotBlank(message = "Password field is required") String password, String confirmPassword) {
         this.username = username;
         this.alias = alias;
         this.fullName = fullName;
         this.password = password;
         this.confirmPassword = confirmPassword;
+
     }
 
     @Override

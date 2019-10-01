@@ -6,11 +6,14 @@ import com.phan.spring_gram_backend.model.Post;
 import com.phan.spring_gram_backend.model.User;
 import com.phan.spring_gram_backend.repository.FollowersRepository;
 import com.phan.spring_gram_backend.repository.PostRepository;
+import com.phan.spring_gram_backend.repository.ProfileImageRepository;
 import com.phan.spring_gram_backend.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.*;
 
 @Service
@@ -24,6 +27,9 @@ public class UserService {
 
     @Autowired
     private FollowersRepository followersRepository;
+
+    @Autowired
+    private ProfileImageRepository profileImageRepository;
 
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
@@ -47,6 +53,72 @@ public class UserService {
         } catch (Exception e) {
             throw new NullPointerException();
         }
+    }
+
+    public Map<String, Object> editProfile(String username, MultipartFile profileImage, String fullName) {
+        User user2 = userRepository.getById(userRepository.findByUsername(username).getId());
+
+
+//        ProfileImage profileImage1 = new ProfileImage();
+//        if (profileImage != null) {
+//            try {
+//
+//                profileImage1.setProfileImage(profileImage.getBytes());
+//                profileImage1.setUser(user2);
+//
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+//        }
+
+        if (profileImage != null) {
+            try {
+
+                user2.setProfileImage(profileImage.getBytes());
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+
+        user2.setId(user2.getId());
+//        user2.setProfileImage(profileImage1);
+        user2.setFullName(fullName);
+        userRepository.save(user2);
+
+        User user = userRepository.findByAlias(userRepository.findByUsername(username).getAlias());
+
+        List<Post> posts = postRepository.findAllByUser(user);
+
+        Map<String, Object> profile = new HashMap<>();
+        List<Map<String, Object>> followers = new ArrayList<>();
+        List<Map<String, Object>> following = new ArrayList<>();
+
+
+        for (Followers f : user.getFollowers()) {
+            Map<String, Object> followersMap = new HashMap<>();
+            followersMap.put("id", f.getId());
+            followersMap.put("userAlias", f.getFollowersAlias());
+
+            followers.add(followersMap);
+        }
+
+        for (Followers f : user.getFollowing()) {
+            Map<String, Object> followingMap = new HashMap<>();
+            followingMap.put("id", f.getId());
+            followingMap.put("userAlias", f.getFollowingAlias());
+
+            following.add(followingMap);
+        }
+
+        profile.put("userId", user.getId());
+        profile.put("postCount", postRepository.findAllByUser(user).size());
+        profile.put("followers", followers);
+        profile.put("following", following);
+        profile.put("posts", posts);
+
+        return profile;
     }
 
     public Map<String, Object> getProfile(String userAlias) {
@@ -128,6 +200,11 @@ public class UserService {
         followersRepository.delete(follow);
 
         return getProfile(userUnfollower.getAlias());
+    }
+
+    public byte[] getProfileImage(String userAlias) {
+
+        return userRepository.findByAlias(userAlias).getProfileImage();
     }
 
 }
