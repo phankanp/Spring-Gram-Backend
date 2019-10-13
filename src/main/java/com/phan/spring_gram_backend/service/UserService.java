@@ -29,9 +29,6 @@ public class UserService {
     private FollowersRepository followersRepository;
 
     @Autowired
-    private ProfileImageRepository profileImageRepository;
-
-    @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     public User saveUser(User user) {
@@ -58,19 +55,6 @@ public class UserService {
     public Map<String, Object> editProfile(String username, MultipartFile profileImage, String fullName) {
         User user2 = userRepository.getById(userRepository.findByUsername(username).getId());
 
-
-//        ProfileImage profileImage1 = new ProfileImage();
-//        if (profileImage != null) {
-//            try {
-//
-//                profileImage1.setProfileImage(profileImage.getBytes());
-//                profileImage1.setUser(user2);
-//
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
-//        }
-
         if (profileImage != null) {
             try {
 
@@ -81,114 +65,45 @@ public class UserService {
             }
         }
 
-
         user2.setId(user2.getId());
-//        user2.setProfileImage(profileImage1);
         user2.setFullName(fullName);
         userRepository.save(user2);
 
         User user = userRepository.findByAlias(userRepository.findByUsername(username).getAlias());
 
-        List<Post> posts = postRepository.findAllByUser(user);
-
-        Map<String, Object> profile = new HashMap<>();
-        List<Map<String, Object>> followers = new ArrayList<>();
-        List<Map<String, Object>> following = new ArrayList<>();
-
-
-        for (Followers f : user.getFollowers()) {
-            Map<String, Object> followersMap = new HashMap<>();
-            followersMap.put("id", f.getId());
-            followersMap.put("userAlias", f.getFollowersAlias());
-
-            followers.add(followersMap);
-        }
-
-        for (Followers f : user.getFollowing()) {
-            Map<String, Object> followingMap = new HashMap<>();
-            followingMap.put("id", f.getId());
-            followingMap.put("userAlias", f.getFollowingAlias());
-
-            following.add(followingMap);
-        }
-
-        profile.put("userId", user.getId());
-        profile.put("postCount", postRepository.findAllByUser(user).size());
-        profile.put("followers", followers);
-        profile.put("following", following);
-        profile.put("posts", posts);
-
-        return profile;
+        return getStringObjectMap(user);
     }
+
 
     public Map<String, Object> getProfile(String userAlias) {
         User user = userRepository.findByAlias(userAlias);
 
-        List<Post> posts = postRepository.findAllByUser(user);
+        return getStringObjectMap(user);
+    }
 
+    private Map<String, Object> getStringObjectMap(User user) {
         Map<String, Object> profile = new HashMap<>();
-        List<Map<String, Object>> followers = new ArrayList<>();
-        List<Map<String, Object>> following = new ArrayList<>();
-
-
-        for (Followers f : user.getFollowers()) {
-            Map<String, Object> followersMap = new HashMap<>();
-            followersMap.put("id", f.getId());
-            followersMap.put("userAlias", f.getFollowersAlias());
-
-            followers.add(followersMap);
-        }
-
-        for (Followers f : user.getFollowing()) {
-            Map<String, Object> followingMap = new HashMap<>();
-            followingMap.put("id", f.getId());
-            followingMap.put("userAlias", f.getFollowingAlias());
-
-            following.add(followingMap);
-        }
 
         profile.put("userId", user.getId());
         profile.put("postCount", postRepository.findAllByUser(user).size());
-        profile.put("followers", followers);
-        profile.put("following", following);
-        profile.put("posts", posts);
+        profile.put("followers", getFollowers(user));
+        profile.put("following", getFollowing(user));
+        profile.put("userAlias", user.getAlias());
+        profile.put("posts", postRepository.findAllByUser(user));
 
         return profile;
     }
 
     public Map<String, Object> addFollow(Long toFollowUserId, String username) {
-        Followers follow = new Followers();
 
-        User userFollower = userRepository.findByUsername(username);
+        followersRepository.save(setFollower(toFollowUserId, username));
 
-        Optional<User> userToFollow = userRepository.findById(toFollowUserId);
-
-        follow.setUserFollower(userFollower);
-        follow.setFollowing(userToFollow.get());
-
-        follow.setFollowersAlias(userFollower.getAlias());
-        follow.setFollowingAlias(userToFollow.get().getAlias());
-
-        followersRepository.save(follow);
-
-        return getProfile(userFollower.getAlias());
-
+        return getProfile(userRepository.getById(toFollowUserId).getAlias());
     }
 
     public void addFollowDBLoader(Long toFollowUserId, String username) {
-        Followers follow = new Followers();
 
-        User userFollower = userRepository.findByUsername(username);
-
-        Optional<User> userToFollow = userRepository.findById(toFollowUserId);
-
-        follow.setUserFollower(userFollower);
-        follow.setFollowing(userToFollow.get());
-
-        follow.setFollowersAlias(userFollower.getAlias());
-        follow.setFollowingAlias(userToFollow.get().getAlias());
-
-        followersRepository.save(follow);
+        followersRepository.save(setFollower(toFollowUserId, username));
     }
 
     public Map<String, Object> removeFollow(Long toUnFollowUserId, String username) {
@@ -199,7 +114,7 @@ public class UserService {
 
         followersRepository.delete(follow);
 
-        return getProfile(userUnfollower.getAlias());
+        return getProfile(userRepository.getById(toUnFollowUserId).getAlias());
     }
 
     public byte[] getProfileImage(String userAlias) {
@@ -207,4 +122,47 @@ public class UserService {
         return userRepository.findByAlias(userAlias).getProfileImage();
     }
 
+    private List<Map<String, Object>> getFollowers(User user) {
+        List<Map<String, Object>> followers = new ArrayList<>();
+
+        for (Followers f : user.getFollowers()) {
+            Map<String, Object> followersMap = new HashMap<>();
+            followersMap.put("id", f.getId());
+            followersMap.put("userAlias", f.getFollowersAlias());
+
+            followers.add(followersMap);
+        }
+
+        return followers;
+    }
+
+    private List<Map<String, Object>> getFollowing(User user) {
+        List<Map<String, Object>> following = new ArrayList<>();
+
+        for (Followers f : user.getFollowing()) {
+            Map<String, Object> followingMap = new HashMap<>();
+            followingMap.put("id", f.getId());
+            followingMap.put("userAlias", f.getFollowingAlias());
+
+            following.add(followingMap);
+        }
+
+        return following;
+    }
+
+    private Followers setFollower(Long toFollowUserId, String username) {
+        Followers follow = new Followers();
+
+        User userFollower = userRepository.findByUsername(username);
+
+        Optional<User> userToFollow = userRepository.findById(toFollowUserId);
+
+        follow.setUserFollower(userFollower);
+        follow.setFollowing(userToFollow.get());
+
+        follow.setFollowersAlias(userFollower.getAlias());
+        follow.setFollowingAlias(userToFollow.get().getAlias());
+
+        return follow;
+    }
 }
