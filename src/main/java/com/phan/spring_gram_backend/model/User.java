@@ -74,23 +74,15 @@ public class User implements UserDetails {
     )
     private Set<Followers> following = new HashSet<>();
 
-//    @OneToOne(fetch = FetchType.LAZY,
-////            cascade =  CascadeType.ALL,
-////            mappedBy = "user")
-////    @JsonIgnore
-////    private ProfileImage profileImage;
+    String profileImageUrl;
 
-    @Lob
-    @Type(type = "org.hibernate.type.ImageType")
-    private byte[] profileImage;
-
-    public User(@Email(message = "Username needs to be an valid email") @NotBlank(message = "username is required") String username, @NotBlank(message = "Please enter alias.") String alias, @NotBlank(message = "Please enter your full name") String fullName, @NotBlank(message = "Password field is required") String password, String confirmPassword, byte[] profileImage) {
+    public User(@Email(message = "Username needs to be an valid email") @NotBlank(message = "username is required") String username, @NotBlank(message = "Please enter alias.") String alias, @NotBlank(message = "Please enter your full name") String fullName, @NotBlank(message = "Password field is required") String password, String confirmPassword, String profileImageUrl) {
         this.username = username;
         this.alias = alias;
         this.fullName = fullName;
         this.password = password;
         this.confirmPassword = confirmPassword;
-        this.profileImage = profileImage;
+        this.profileImageUrl = profileImageUrl;
     }
 
     public User(@Email(message = "Username needs to be an valid email") @NotBlank(message = "username is required") String username, @NotBlank(message = "Please enter alias.") String alias, @NotBlank(message = "Please enter your full name") String fullName, @NotBlank(message = "Password field is required") String password, String confirmPassword) {

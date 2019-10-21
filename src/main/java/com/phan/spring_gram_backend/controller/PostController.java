@@ -1,5 +1,8 @@
 package com.phan.spring_gram_backend.controller;
 
+import com.cloudinary.Transformation;
+import com.cloudinary.utils.ObjectUtils;
+import com.phan.spring_gram_backend.config.CloudinaryConfig;
 import com.phan.spring_gram_backend.model.Like;
 import com.phan.spring_gram_backend.model.Post;
 import com.phan.spring_gram_backend.service.PostService;
@@ -13,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
+import java.io.IOException;
 import java.security.Principal;
 import java.util.HashMap;
 import java.util.List;
@@ -29,6 +33,9 @@ public class PostController {
     @Autowired
     private ValidationErrorService validationErrorService;
 
+    @Autowired
+    CloudinaryConfig cloudinaryConfig;
+
     @GetMapping("/")
     public ResponseEntity<?> getAllPosts() {
         return ResponseEntity.ok(postService.getAllPost());
@@ -42,12 +49,12 @@ public class PostController {
         return new ResponseEntity<>(post, HttpStatus.OK);
     }
 
-    @GetMapping(value = "/{postId}/image", produces = MediaType.IMAGE_JPEG_VALUE)
-    @ResponseBody
-    public byte[] postImage(@PathVariable Long postId) {
-
-        return postService.getPostById(postId).getImage();
-    }
+//    @GetMapping(value = "/{postId}/image", produces = MediaType.IMAGE_JPEG_VALUE)
+//    @ResponseBody
+//    public byte[] postImage(@PathVariable Long postId) {
+//
+//        return postService.getPostById(postId).getImage();
+//    }
 
     @PostMapping("/")
     public ResponseEntity<?> createNewPosts(@Valid Post post, BindingResult result, MultipartFile image, Principal principal) {
@@ -66,7 +73,21 @@ public class PostController {
             return new ResponseEntity<Map<String, String>>(errorMap, HttpStatus.BAD_REQUEST);
         }
 
-        Post post1 = postService.saveOrUpdatePost(post, image, principal.getName());
+        String imageUrl = "";
+
+        try {
+            Map uploadResult =  cloudinaryConfig.upload(image.getBytes(), ObjectUtils.asMap(
+                    "resourcetype", "auto",
+                    "transformation", new Transformation().width(854).height(576),
+                    "folder", "post_images"
+            ));
+            imageUrl = (String) uploadResult.get("url");
+        } catch (IOException e) {
+            e.printStackTrace();
+            errorMap.put("message", "Upload failed");
+        }
+
+        Post post1 = postService.saveOrUpdatePost(post, imageUrl, principal.getName());
 
         return new ResponseEntity<>(post1, HttpStatus.CREATED);
     }

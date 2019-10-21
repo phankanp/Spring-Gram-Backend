@@ -52,19 +52,10 @@ public class UserService {
         }
     }
 
-    public Map<String, Object> editProfile(String username, MultipartFile profileImage, String fullName) {
+    public Map<String, Object> editProfile(String username,  String fullName, String profileImageUrl) {
         User user2 = userRepository.getById(userRepository.findByUsername(username).getId());
 
-        if (profileImage != null) {
-            try {
-
-                user2.setProfileImage(profileImage.getBytes());
-
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-
+        user2.setProfileImageUrl(profileImageUrl);
         user2.setId(user2.getId());
         user2.setFullName(fullName);
         userRepository.save(user2);
@@ -117,10 +108,10 @@ public class UserService {
         return getProfile(userRepository.getById(toUnFollowUserId).getAlias());
     }
 
-    public byte[] getProfileImage(String userAlias) {
-
-        return userRepository.findByAlias(userAlias).getProfileImage();
-    }
+//    public byte[] getProfileImage(String userAlias) {
+//
+//        return userRepository.findByAlias(userAlias).getProfileImage();
+//    }
 
     private List<Map<String, Object>> getFollowers(User user) {
         List<Map<String, Object>> followers = new ArrayList<>();
@@ -164,5 +155,9 @@ public class UserService {
         follow.setFollowingAlias(userToFollow.get().getAlias());
 
         return follow;
+    }
+
+    public String getUserProfileImageUrl(String userAlias) {
+        return userRepository.findByAlias(userAlias).getProfileImageUrl();
     }
 }

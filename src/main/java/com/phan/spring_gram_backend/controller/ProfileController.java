@@ -1,5 +1,8 @@
 package com.phan.spring_gram_backend.controller;
 
+import com.cloudinary.Transformation;
+import com.cloudinary.utils.ObjectUtils;
+import com.phan.spring_gram_backend.config.CloudinaryConfig;
 import com.phan.spring_gram_backend.model.User;
 import com.phan.spring_gram_backend.repository.FollowersRepository;
 import com.phan.spring_gram_backend.service.UserService;
@@ -12,7 +15,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
+import java.io.IOException;
 import java.security.Principal;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/profile")
@@ -24,6 +29,9 @@ public class ProfileController {
 
     @Autowired
     FollowersRepository followersRepository;
+
+    @Autowired
+    CloudinaryConfig cloudinaryConfig;
 
     @GetMapping("/user/{userAlias}")
     public ResponseEntity<?> getAllPosts(@PathVariable String userAlias) {
@@ -45,14 +53,32 @@ public class ProfileController {
     @PostMapping("/")
     public ResponseEntity<?> editProfile(@Valid User user, BindingResult result, MultipartFile profileImage, Principal principal) {
 
+        String profileImageUrl = "";
 
-        return new ResponseEntity<>(userService.editProfile(principal.getName(), profileImage, user.getFullName()), HttpStatus.OK);
+        try {
+            Map uploadResult =  cloudinaryConfig.upload(profileImage.getBytes(), ObjectUtils.asMap(
+                    "resourcetype", "auto",
+                    "transformation", new Transformation().width(854).height(576),
+                    "folder", "profile_images"
+            ));
+            profileImageUrl = (String) uploadResult.get("url");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return new ResponseEntity<>(userService.editProfile(principal.getName(), user.getFullName(), profileImageUrl), HttpStatus.OK);
     }
 
-    @GetMapping(value = "/{userAlias}/image", produces = MediaType.IMAGE_JPEG_VALUE)
-    @ResponseBody
-    public byte[] profileImage(@PathVariable String userAlias) {
+//    @GetMapping(value = "/{userAlias}/image", produces = MediaType.IMAGE_JPEG_VALUE)
+//    @ResponseBody
+//    public byte[] profileImage(@PathVariable String userAlias) {
+//
+//        return userService.getProfileImage(userAlias);
+//    }
 
-        return userService.getProfileImage(userAlias);
+    @GetMapping(value = "/{userAlias}/imageUrl")
+    public String getProfileImageUrl(@PathVariable String userAlias) {
+
+        return userService.getUserProfileImageUrl(userAlias);
     }
 }

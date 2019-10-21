@@ -44,7 +44,7 @@ public class PostService {
         return findPost.get();
     }
 
-    public Post saveOrUpdatePost(Post post, MultipartFile imageFile, String username) {
+    public Post saveOrUpdatePost(Post post, String imageUrl, String username) {
 
         if (post.getId() != null) {
             Optional<Post> existingPost = postRepository.findById(post.getId());
@@ -56,11 +56,7 @@ public class PostService {
             }
         }
 
-        try {
-            post.setImage(imageFile.getBytes());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        post.setImageUrl(imageUrl);
 
         User user = userRepository.findByUsername(username);
 
