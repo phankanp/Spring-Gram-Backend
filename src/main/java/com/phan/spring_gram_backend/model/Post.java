@@ -24,12 +24,6 @@ public class Post {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-//    @Lob
-//    @Type(type = "org.hibernate.type.ImageType")
-//    @NotNull(message = "Must include an image")
-//    @JsonIgnore
-//    private byte[] image;
-
     private String imageUrl;
 
     @NotBlank(message = "Caption is required")
@@ -59,11 +53,15 @@ public class Post {
 
     private String userAlias;
 
+    private String location;
+
     private int likeCount = 0;
 
-    public Post(String imageUrl, @NotBlank(message = "Caption is required") String caption) {
+    public Post(String imageUrl, @NotBlank(message = "Caption is required") String caption, User user, String userAlias, String location) {
         this.imageUrl = imageUrl;
         this.caption = caption;
+        this.user = user;
+        this.userAlias = userAlias;
+        this.location = location;
     }
-
 }

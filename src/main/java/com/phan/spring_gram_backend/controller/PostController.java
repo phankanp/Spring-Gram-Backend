@@ -49,13 +49,6 @@ public class PostController {
         return new ResponseEntity<>(post, HttpStatus.OK);
     }
 
-//    @GetMapping(value = "/{postId}/image", produces = MediaType.IMAGE_JPEG_VALUE)
-//    @ResponseBody
-//    public byte[] postImage(@PathVariable Long postId) {
-//
-//        return postService.getPostById(postId).getImage();
-//    }
-
     @PostMapping("/")
     public ResponseEntity<?> createNewPosts(@Valid Post post, BindingResult result, MultipartFile image, Principal principal) {
 
