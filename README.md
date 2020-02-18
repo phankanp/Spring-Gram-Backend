@@ -1,14 +1,9 @@
-# Spring-Gram
+# Spring-Gram - [Live App!](https://bit.ly/Heroku-Spring-Gram)
 
-A REST API for a full stack project with a React client. 
-- The app is a social media web app for sharing photos. 
+A REST API for a full stack project with a React client - [Front End Code](https://github.com/phankanp/Spring-Gram-Frontend). 
+- Social web app for sharing photos. 
 
-<img src="https://res.cloudinary.com/djmrmontu/image/upload/v1573424421/Github%20Images/Spring_Gram_-_Home_xilqcg.png" height="250px" width="250px"> <img src="https://res.cloudinary.com/djmrmontu/image/upload/v1573424708/Github%20Images/Spring_Gram_-_Home_Logged_In_qeus3y.png" height="250px" width="250px"> <img src="https://res.cloudinary.com/djmrmontu/image/upload/v1573424710/Github%20Images/Spring_Gram_-_Gallery_fqm12g.png" height="250px" width="250px"> <img src="https://res.cloudinary.com/djmrmontu/image/upload/v1573424712/Github%20Images/Spring_Gram_-_Profile_mdz15r.png" height="250px" width="250px"> <img src="https://res.cloudinary.com/djmrmontu/image/upload/v1573424815/Github%20Images/Spring_Gram_-_Register_q8hv2p.png" height="250px" width="250px"> <img src="https://res.cloudinary.com/djmrmontu/image/upload/v1573424817/Github%20Images/Spring_Gram_-_Login_iiqvpu.png" height="250px" width="250px"> <img src="https://res.cloudinary.com/djmrmontu/image/upload/v1573424818/Github%20Images/Spring_Gram_-_Create_Post_qowm3d.png" height="250px" width="250px">
-
-
-
-
-### [Live App!](bit.ly/Heroku-Spring-Gram)
+<img src="https://res.cloudinary.com/djmrmontu/image/upload/v1581138021/Github%20Images/Spring%20Gram/spring_gram_home_b43igv.png" height="250px" width="250px"> <img src="https://res.cloudinary.com/djmrmontu/image/upload/v1581138220/Github%20Images/Spring%20Gram/spring_gram_login_home_vzkuvx.png" height="250px" width="250px"> <img src="https://res.cloudinary.com/djmrmontu/image/upload/v1581138226/Github%20Images/Spring%20Gram/spring_gram_gallery_yreidk.png" height="250px" width="250px"> <img src="https://res.cloudinary.com/djmrmontu/image/upload/v1581138220/Github%20Images/Spring%20Gram/spring_gram_profile_um5tij.png" height="250px" width="250px"> <img src="https://res.cloudinary.com/djmrmontu/image/upload/v1581138220/Github%20Images/Spring%20Gram/spring_gram_new_post_hprywb.png" height="250px" width="250px"> <img src="https://res.cloudinary.com/djmrmontu/image/upload/v1581138019/Github%20Images/Spring%20Gram/spring_gram_login_dmumnb.png" height="250px" width="250px"> <img src="https://res.cloudinary.com/djmrmontu/image/upload/v1581138020/Github%20Images/Spring%20Gram/spring_gram_register_fmd1du.png" height="250px" width="250px">
 
 ### Backend Stack
 
@@ -23,7 +18,7 @@ A REST API for a full stack project with a React client.
 
 ### API Used
 
-- Google Maps
+- Google Places
 - Cloudinary
 
 ### Client Stack
