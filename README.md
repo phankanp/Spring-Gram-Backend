@@ -1,4 +1,4 @@
-# Spring-Gram - [Live App!](https://bit.ly/Heroku-Spring-Gram)
+# Spring-Gram
 
 A REST API for a full stack project with a React client - [Front End Code](https://github.com/phankanp/Spring-Gram-Frontend). 
 - Social web app for sharing photos. 
